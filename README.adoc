@@ -41,6 +41,7 @@ The regular inline macro form:
 xref:foo[Foo]             - a link to a location in the same document with ID "foo"
 xref:bar#[Bar]            - a link to a document named "bar.adoc"
 xref:bar.adoc[Bar]        - same
+xref:bar.adoc#[Bar]       - same
 xref:bar#foo[Foobar]      - a link to location ID "foo" in document "bar.adoc"
 xref:bar.adoc#foo[Foobar] - same
 ----
@@ -51,6 +52,7 @@ The same cross-reference links in the alternative syntax:
 <<foo,Foo>> 
 <<bar#,Bar>> 
 <<bar.adoc,Bar>>   <--- does not currently work
+<<bar.adoc#,Bar>> 
 <<bar#foo,Foobar>>
 <<bar.adoc#foo,Foobar>>
 ----
