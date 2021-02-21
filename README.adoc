@@ -1,0 +1,207 @@
+= Cross-reference addressing
+
+AsciiDoc documents may make cross-reference links to:
+
+* A location in the same document (by ID)
+* A location in another document (by document name and location ID)
+* Another document (by document name)
+
+Cross-reference links to other documents must be be within a "document set".
+
+
+== Cross-reference ("xref") syntax
+
+An AsciiDoc cross-references have the following syntax:
+
+----
+xref:DOCUMENT-NAME#SECTION-ID[LABEL]
+<<DOCUMENT-NAME#SECTION-ID,LABEL>>
+----
+
+With the following rules:
+
+* `DOCUMENT-NAME` must refer to the relative path name of another AsciiDoc document within a "document set".
+* If the `#` is _not_ present, the `DOCUMENT-NAME` _must_ end in the string ".adoc".
+* If the `#` is present, the ".adoc" ending may left off of the `DOCUMENT-NAME` and is implied.
+* Either a `DOCUMENT-NAME` _or_ `SECTION-ID` is required.
+* If both `DOCUMENT-NAME` _and_ `SECTION-ID` are present, they must be separated with `#`.
+* `LABEL` is optional _unless_ the `DOCUMENT-NAME` is provided (current tooling cannot infer the title)
+* If the `LABEL` is not present, the `[]` may remain empty in the first syntactical form and the `,` may be left off in the second syntactical form.
+
+
+== How others do it
+
+=== URI
+
+The one linking method to rule them all is the World Wide Web's URI spec, the latest version of which is described in RFC3986:
+
+https://www.ietf.org/rfc/rfc3986.html
+
+> A Uniform Resource Identifier (URI) provides a simple and extensible means for identifying a resource.
+
+The URI scheme meets goals that are a bit loftier than what is needed for cross-referencing AsciiDoc locations/documents.
+
+_However_, link:https://www.ietf.org/rfc/rfc3986.html#section-3.3[Section 3.3 Path] seems very appropriate for identifying the absolute and relative location of a document in a set of documentation.
+
+Specifically, it seems we could lift these portions wholesale:
+
+----
+   A path consists of a sequence of path segments separated by a slash
+   ("/") character.  ...
+
+   The path segments "." and "..", also known as dot-segments, are
+   defined for relative reference within the path name hierarchy.  They
+   are intended for use at the beginning of a relative-path reference
+   (Section 4.2) to indicate relative position within the hierarchical
+   tree of names.  This is similar to their role within some operating
+   systems' file directory structures to indicate the current directory
+   and parent directory, respectively.  However, unlike in a file
+   system, these dot-segments are only interpreted within the URI path
+   hierarchy and are removed as part of the resolution process (Section
+   5.2).
+----
+
+=== Sphinx
+
+Sphinx uses reStructuredText (reST):
+
+* Sphinx https://en.wikipedia.org/wiki/Sphinx_(documentation_generator)
+* Sphinx https://www.sphinx-doc.org/en/master/
+* reST https://en.wikipedia.org/wiki/ReStructuredText
+* reST https://www.sphinx-doc.org/en/master/usage/restructuredtext/index.html
+
+Sphinx/reST has explicit support for cross-referencing to locations in other files:
+
+> To support cross-referencing to arbitrary locations in any document, the standard reST labels are used. For this to work label names must be unique throughout the entire documentation.
+
+Example of normal cross-reference:
+
+----
+ .. _my-reference-label:
+
+ Section to cross-reference
+ --------------------------
+
+ This is the text of the section.
+
+ It refers to the section itself, see :ref:`my-reference-label`.
+----
+
+The documentation explains that this will also work across files automatically!
+
+https://www.sphinx-doc.org/en/master/usage/restructuredtext/roles.html#cross-referencing-arbitrary-locations
+
+Sphinx _also_ has explicit support for linking to other reST documents! And note the lack of file extension:
+
+> Link to the specified document; the document name can be specified in absolute or relative fashion. For example, if the reference :doc:`parrot` occurs in the document sketches/index, then the link refers to sketches/parrot. If the reference is :doc:`/people` or :doc:`../people`, the link refers to people.
+
+> If no explicit link text is given (like usual: :doc:`Monty Python members </people>`), the link caption will be the title of the given document.
+
+
+There's also a project that lets you write Sphinx documentation in Markdown and it supports these linking rules as well:
+
+> There is no need to put the role. It should just be [Link text](/myMDfile) or the relative path with [Link text](myMDfile).
+
+https://github.com/readthedocs/recommonmark/issues/108
+
+
+== Texinfo
+
+The GNU Texinfo syntax for writing manuals has the ability to cross-reference other documents:
+
+> Ordinarily, you must always name a node in a cross-reference. However, it’s not unusual to want to refer to another manual as a whole, rather than a particular section within it. In this case, giving any section name is an unnecessary distraction.
+
+> So, with cross-references to other manuals (see Four and Five Arguments), if the first argument is either ‘Top’ (capitalized just that way) or omitted entirely, and the third argument is omitted, the printed output includes no node or section name. (The Info output includes ‘Top’ if it was given.) 
+
+Example, where `make` is the name of the manual to link to:
+
+----
+@xref{Top,,, make, The GNU Make Manual}.
+----
+
+https://www.gnu.org/software/texinfo/manual/texinfo/html_node/Referring-to-a-Manual-as-a-Whole.html
+https://en.wikipedia.org/wiki/Texinfo
+
+
+== Org-mode
+
+Not surprisingly, Org-mode has a crazy number of link options:
+
+https://orgmode.org/manual/Link-Format.html
+https://orgmode.org/manual/Internal-Links.html
+https://orgmode.org/manual/External-Links.html
+
+Amusingly, "internal links" reverse AsciiDoc's `[[]]` and `<<>>` anchor and xref syntax:
+
+----
+<<foo>> This is info about foo.
+
+Here is a link to [[foo]].
+----
+
+But most relevant to the AsciiDoc situation is Org-mode's publishing process, which is impressive:
+
+> To create a link from one Org file to another, you would use something like ‘[[file:foo.org][The foo]]’ or simply ‘[[file:foo.org]]’ (see External Links). When published, this link becomes a link to ‘foo.html’. You can thus interlink the pages of your “Org web” project and the links will work as expected when you publish them to HTML. If you also publish the Org source file and want to link to it, use an ‘http’ link instead of a ‘file:’ link, because ‘file’ links are converted to link to the corresponding ‘.html’ file. 
+
+> Eventually, links between published documents can contain some search options (see Search Options), which will be resolved to the appropriate location in the linked file. For example, once published to HTML, the following links all point to a dedicated anchor in ‘foo.html’.
+
+----
+    [[file:foo.org::*heading]]
+    [[file:foo.org::#custom-id]]
+    [[file:foo.org::target]]
+----
+
+https://orgmode.org/manual/Publishing-links.html
+
+
+== Wikis
+
+From the original WikiWikiWeb to MediaWiki, linking between documents ("pages") is fundamental to Wikis.
+
+----
+A link in WikiWikiWeb is CamelCaseLikeThis.
+
+A link in MediaWiki uses brackets like [[foo]] or  [[foo|Foo Description]].
+----
+
+https://en.wikipedia.org/wiki/WikiWikiWeb
+https://en.wikipedia.org/wiki/Creole_(markup)
+
+Wiki pages may or may not be stored in files and they are often converted on the fly to HTML for viewing. It is fundamental to wikis that all link conversion is completely automatic and as frictionless as possible.
+
+
+== TeX / LaTeX
+
+It looks like inter-document linking can absolutely be done, but it requires additional "packages" such as `xr` and/or `zref`. But the "external document" has to be declared in the calling document. I don't think this is something to be emulated.
+
+https://tex.stackexchange.com/questions/14364/cross-referencing-between-different-files
+
+== troff/Groff/nroff/etc.
+
+Troff is truly for stand-alone documents and manual pages. They have traditional bibiographic-style "references", but virtually no concept of linking other than URL hyperlinks and email address links (which PDF and HTML export types seem to understand) (which PDF and HTML export types seem to understand).
+
+https://en.wikipedia.org/wiki/Troff
+https://man7.org/linux/man-pages/man7/groff_man.7.html
+
+
+== Tests to do 
+
+
+
+----
+xref:foo[]
+<<foo>>
+
+xref:qux.adoc#[]
+<<qux.adoc#>>
+
+xref:foo#bar[]
+<<foo#bar>>
+
+xref:foo#bar[]
+
+...
+
+----
+
+
