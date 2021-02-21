@@ -1,4 +1,4 @@
-= Cross-reference addressing
+= AsciiDoc cross-reference addressing
 
 AsciiDoc documents may make cross-reference links to:
 
@@ -14,8 +14,13 @@ Cross-reference links to other documents must be be within a "document set".
 An AsciiDoc cross-references have the following syntax:
 
 ----
-xref:DOCUMENT-NAME#SECTION-ID[LABEL]
-<<DOCUMENT-NAME#SECTION-ID,LABEL>>
+xref:DOCUMENT-NAME#LOCATION-ID[LABEL]
+----
+
+Or the alternate compact form:
+
+----
+<<DOCUMENT-NAME#LOCATION-ID,LABEL>>
 ----
 
 With the following rules:
@@ -23,11 +28,32 @@ With the following rules:
 * `DOCUMENT-NAME` must refer to the relative path name of another AsciiDoc document within a "document set".
 * If the `#` is _not_ present, the `DOCUMENT-NAME` _must_ end in the string ".adoc".
 * If the `#` is present, the ".adoc" ending may left off of the `DOCUMENT-NAME` and is implied.
-* Either a `DOCUMENT-NAME` _or_ `SECTION-ID` is required.
-* If both `DOCUMENT-NAME` _and_ `SECTION-ID` are present, they must be separated with `#`.
+* Either a `DOCUMENT-NAME` _or_ `LOCATION-ID` is required.
+* If both `DOCUMENT-NAME` _and_ `LOCATION-ID` are present, they must be separated with `#`.
 * `LABEL` is optional _unless_ the `DOCUMENT-NAME` is provided (current tooling cannot infer the title)
-* If the `LABEL` is not present, the `[]` may remain empty in the first syntactical form and the `,` may be left off in the second syntactical form.
+* If the `LABEL` is not present, the `[]` may remain empty in the first form and the `,` may be left off in the second compact `<<>>` form.
 
+=== Examples of "xref" syntax
+
+The regular inline macro form:
+
+----
+xref:foo[Foo]             - a link to a location in the same document with ID "foo"
+xref:bar#[Bar]            - a link to a document named "bar.adoc"
+xref:bar.adoc[Bar]        - same
+xref:bar#foo[Foobar]      - a link to location ID "foo" in document "bar.adoc"
+xref:bar.adoc#foo[Foobar] - same
+----
+
+The same cross-reference links in the alternative syntax:
+
+----
+<<foo,Foo>> 
+<<bar#,Bar>> 
+<<bar.adoc,Bar>>   <--- does not currently work
+<<bar#foo,Foobar>>
+<<bar.adoc#foo,Foobar>>
+----
 
 == How others do it
 
@@ -182,26 +208,4 @@ Troff is truly for stand-alone documents and manual pages. They have traditional
 
 https://en.wikipedia.org/wiki/Troff
 https://man7.org/linux/man-pages/man7/groff_man.7.html
-
-
-== Tests to do 
-
-
-
-----
-xref:foo[]
-<<foo>>
-
-xref:qux.adoc#[]
-<<qux.adoc#>>
-
-xref:foo#bar[]
-<<foo#bar>>
-
-xref:foo#bar[]
-
-...
-
-----
-
 
