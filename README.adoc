@@ -1,4 +1,35 @@
-= AsciiDoc cross-reference addressing
+= AsciiDoc Xref Proof of Concept
+
+This repo contains a "code-as-documentation" example of a proposed cross-reference addressing (and related syntax) scheme for AsciiDoc documents.
+
+This README contains a description of what is being proposed, as well as some research notes.
+
+To try it out:
+
+```
+$ ruby test.rb
+```
+
+To see the results without running anything:
+
+```
+<TODO>
+```
+
+== What the application tests:
+
+* Correct handling of document name and location ID in xrefs (addressing).
+* Relative "path segments" in document names.
+* Proof-of-concept of xref addressing.
+
+== What the application does NOT test:
+
+* Any kind of AsciiDoc lexing or parsing (the xref links all have labels, for example).
+* Input validation - these tests are all syntactically and semantically correct and the paths are correct.
+* Filesystem handling (but that's kind of the whole point).
+* Content output generation (HTML links are created as an example because they are ubiquitous and HTML output can be one-to-one, one-to-many and many-to-one in relation to the input source).
+
+== Proposing AsciiDoc Cross-Reference Addressing
 
 AsciiDoc documents may make cross-reference links to:
 
@@ -8,6 +39,25 @@ AsciiDoc documents may make cross-reference links to:
 
 Cross-reference links to other documents must be be within a "document set".
 
+The document name may include multiple segments separated by "/" which resemble a file path.  Cross-reference links may reference other documents with names that are relative to the current document in a manner similar to URIs like so:
+
+If made in a document named `foo/bar.adoc`, the following links would resolve like so:
+
+|===
+|Xref Link | Points to
+
+|baz.adoc | foo/baz.adoc
+|beep/boop.adoc | foo/beep/boop.adoc
+|../home.adoc | home.adoc
+|../qux/biff.adoc | qux/biff.adoc
+|===
+
+These _look_ like file paths (and they might very well correspond with actual file paths), but the name segments are system-independent.
+
+They allow documents to be organized into a hierarchical tree.
+The use of "path-like" names with "/" separators is entirely optional.
+
+Note, also, that the `.adoc` suffix at the end of each example document name _looks_ like a file extension (and, as before, may very well correspond actual file names), but there do not need to be files with these names (or any files at all!). The `.adoc` suffix is part of the document name and helps AsciiDoc implementations identify document names (as opposed to location IDs) in the xref syntax. For more on that, read on!
 
 == Cross-reference ("xref") syntax
 

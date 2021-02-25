@@ -1,23 +1,6 @@
 # Import the Xref and Environment classes in xrefs.rb
 require_relative 'xrefs'
 
-# What IS being tested:
-#
-#  * Correct handling of document name and location ID in xrefs (addressing).
-#  * Relative "path segments" in document names.
-#  * Proof-of-concept of xref addressing.
-#
-# What is NOT being tested:
-#
-#  * Any kind of AsciiDoc lexing or parsing (the xref links all have
-#    labels, for example).
-#  * Input validation - these tests are all syntactically and semantically
-#    correct and the paths are correct.
-#  * Filesystem handling (but that's kind of the whole point).
-#  * Content output generation (HTML links are created as an example because
-#    they are ubiquitous and HTML output can be one-to-one, one-to-many
-#    and many-to-one in relation to the input source).
-#
 ##############################################################################
 #
 # Let's start easy: no path segments ("/") and one-to-one exporting.
