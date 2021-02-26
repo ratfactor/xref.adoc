@@ -12,15 +12,13 @@ $ ruby test.rb
 
 To see the results without running anything:
 
-```
-<TODO>
-```
+link:results.html[results.html]
 
 == What the application tests:
 
 * Correct handling of document name and location ID in xrefs (addressing).
 * Relative "path segments" in document names.
-* Proof-of-concept of xref addressing.
+* Proof-of-concept of xrefs independent of publishing 
 
 == What the application does NOT test:
 

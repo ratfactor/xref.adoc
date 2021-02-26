@@ -1,4 +1,7 @@
 class Environment
+  # Describing the document environment and types of tests being run.
+  attr_accessor :description
+
   # test_source_document is the document path FROM WHICH the
   # links are being tested, in other words it's the document
   # in which the links exist.
@@ -9,11 +12,21 @@ class Environment
   #     :one_to_many - multiple files are generated for every .adoc source document
   #     :many_to_one - one file is generated for ALL .adoc source documents
   attr_accessor :export_type
+
+  def print
+    # Prints a heading and list of properties for this test environment.
+    puts "<h2>#{@description}</h2>"
+    puts "<ul>"
+    puts "<li>Source Document: <code>#{@test_source_document}</code>"
+    puts "<li>Type of export: <code>#{@export_type}</code>"
+    puts "</ul>"
+  end
 end
 
 class Xref
   def initialize(env, xref_string)
     @env = env
+    @raw = xref_string
 
     # This xref link's properties
     @document = nil
@@ -96,8 +109,6 @@ class Xref
 
     # throw away last segment (foo.adoc)
     rel_path.pop 
-    puts
-    puts "from #{rel_path} to #{link_path}..."
 
     link_path.split("/").each do |seg|
       if seg.eql?('..')
@@ -125,7 +136,6 @@ class Xref
     # Starting at the front, compare the requested link path to the current
     # source document path.
     link_path.each do |seg|
-      puts "comparing segment #{seg} to #{doc_path}"
       # If the document source path is empty, we're now going "down"
       if doc_path.empty?
         rel_path.push seg
@@ -152,22 +162,52 @@ class Xref
     rel_path.join('/')
   end
 
-  def print
-    puts "Link to #{@document}"
+  def self.printStart
+    puts '<table><thead><tr>'
+    puts '  <th>Xref</th>'
+    puts '  <th>Target</th>'
+    puts '  <th>Location ID</th>'
+    puts '  <th>Output "Path"</th>'
+    puts '  <th>Output Source</th>'
+    puts '  <th>Output</th>'
+    puts '</tr></thead><tbody>'
+  end
 
+  def self.printEnd
+    puts '</tbody></table>'
+  end
+
+  def print
     if @document
       link = make_relative_path @document
+    else
+      link = ""
     end
 
     # Next: if @env.export_type == :many_to_one
 
+    html_link = ""
+
     if @document and @id
-      puts "<a href=\"#{link}.html##{@id}\">#{@label}</a>"
+      html_link = "<a href=\"#{link}.html##{@id}\">#{@label}</a>"
     elsif @document
-      puts "<a href=\"#{link}.html\">#{@label}</a>"
+      html_link = "<a href=\"#{link}.html\">#{@label}</a>"
     else
-      puts "<a href=\"##{@id}\">#{@label}</a>"
+      html_link = "<a href=\"##{@id}\">#{@label}</a>"
     end
+    # Prints a table row for this link nugget
+    puts "<tr>"
+    puts "  <td>#{htmlEntitiesLite(@raw)}</td>"
+    puts "  <td>#{@document}</td>"
+    puts "  <td>#{@id}</td>"
+    puts "  <td>#{htmlEntitiesLite(link)}</td>"
+    puts "  <td>#{htmlEntitiesLite(html_link)}</td>"
+    puts "  <td>#{html_link}</td>"
+    puts "</tr>"
+  end
+
+  def htmlEntitiesLite(str)
+    str.gsub(/[<>]/, '<' => '&lt;', '>' => '&gt;')
   end
 
   attr_reader :document, :id, :label
