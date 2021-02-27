@@ -105,13 +105,13 @@ The same cross-reference links in the alternative syntax:
 ----
 <<foo,Foo>> 
 <<bar#,Bar>> 
-<<bar.adoc,Bar>>   <--- does not currently work
+<<bar.adoc,Bar>> *
 <<bar.adoc#,Bar>> 
 <<bar#foo,Foobar>>
 <<bar.adoc#foo,Foobar>>
 ----
 
-Note that the `<<bar.adoc,Bar>>` form doesn't currently work in _existing_ AsciiDoc implementations! It _does_ work in this test application.
+Note that the form marked with a `*` form doesn't currently work in _existing_ AsciiDoc implementations! It _does_ work in this test application.
 
 == Researching prior art
 
