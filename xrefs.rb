@@ -9,9 +9,19 @@ class Environment
 
   # The type of export to perform:
   #     :one_to_one  - one output file is generated for every .adoc source document
-  #     :one_to_many - multiple files are generated for every .adoc source document
   #     :many_to_one - one file is generated for ALL .adoc source documents
+  #     :one_to_many - multiple files are generated for every .adoc source document
   attr_accessor :export_type
+
+  # For one-to-many exporting only. We'll imagine that we've authored the target
+  # content for the cross-reference in a "section" that differs from the place
+  # where we're making the reference and will therefore be exported into a
+  # different output file.
+  attr_accessor :target_section_name
+
+  def initialize
+    @target_section_name = 'N/A'
+  end
 
   def print
     # Prints a heading and list of properties for this test environment.
@@ -19,6 +29,7 @@ class Environment
     puts "<ul>"
     puts "<li>Source Document: <code>#{@test_source_document}</code>"
     puts "<li>Type of export: <code>#{@export_type}</code>"
+    puts "<li>Export target section name: <code>#{@target_section_name}</code>"
     puts "</ul>"
   end
 end
@@ -122,6 +133,11 @@ class Xref
   end
 
   def make_relative_path(link)
+    # Document portion of cross reference may not exist
+    if link.nil?
+        return nil
+    end
+
     # Perform path comparison between the source document and the link to make
     # a relative path between the two.
     doc_path = @env.test_source_document.split("/")
@@ -164,11 +180,11 @@ class Xref
 
   def self.printStart
     puts '<table><thead><tr>'
-    puts '  <th>Xref</th>'
-    puts '  <th>Target</th>'
-    puts '  <th>Location ID</th>'
-    puts '  <th>Output "Path"</th>'
-    puts '  <th>Output Source</th>'
+    puts '  <th>Input</th>'
+    puts '  <th>Document</th>'
+    puts '  <th>ID</th>'
+    puts '  <th>Output link path</th>'
+    puts '  <th>HTML</th>'
     puts '  <th>Output</th>'
     puts '</tr></thead><tbody>'
   end
@@ -178,35 +194,75 @@ class Xref
   end
 
   def print
-    if @document
-      link = make_relative_path @document
-    else
-      link = ""
+    # Prints an HTML link for an imaginary document set given:
+    #   * The type of export (one file per doc, one big doc, etc.)
+    #   * A document name (possibly with "/" segments)
+    #   * An ID
+    # A cross-referenced document or ID or both will be supplied.
+
+    doc = @document
+    id  = @id
+
+    if @env.export_type == :one_to_one
+      doc = make_relative_path doc
     end
 
-    # Next: if @env.export_type == :many_to_one
-
-    html_link = ""
-
-    if @document and @id
-      html_link = "<a href=\"#{link}.html##{@id}\">#{@label}</a>"
-    elsif @document
-      html_link = "<a href=\"#{link}.html\">#{@label}</a>"
-    else
-      html_link = "<a href=\"##{@id}\">#{@label}</a>"
+    if @env.export_type == :many_to_one
+      # Ficticious, but plausible naming scheme
+      if doc
+        doc.gsub!(/\//, '_')
+        id = "#{doc}_id"
+      end
     end
+
+    if @env.export_type == :one_to_many
+      # Also ficticious, inspired by GNU Textinfo ability to split
+      # output by "chapter", "section", or "node". Unlike one-to-one,
+      # a link with just an ID may still need a file name since the
+      # target location may be in a different output file.
+      #
+      # Here we imagine that the sections are, indeed, different and
+      # therefore have been exported to different files.
+      if !doc
+        doc = @env.test_source_document.sub(/\.adoc/, '')
+      end
+
+      # Add the target section name from the environment we've set up.
+      doc = make_relative_path doc
+      doc = "#{doc}_#{@env.target_section_name}"
+    end
+
+    # Now create html_link based on existence of doc, id, or both
+    if doc and id
+      html_link = "<a href=\"#{doc}.html##{id}\">#{@label}</a>"
+    elsif document
+      html_link = "<a href=\"#{doc}.html\">#{@label}</a>"
+    else
+      html_link = "<a href=\"##{id}\">#{@label}</a>"
+    end
+
+    # Have our display show that there won't be a file path for
+    # many-to-one exports (it's all one file!).
+    if @env.export_type == :many_to_one
+      doc = 'N/A'
+    end
+
     # Prints a table row for this link nugget
     puts "<tr>"
     puts "  <td>#{htmlEntitiesLite(@raw)}</td>"
     puts "  <td>#{@document}</td>"
     puts "  <td>#{@id}</td>"
-    puts "  <td>#{htmlEntitiesLite(link)}</td>"
+    puts "  <td>#{htmlEntitiesLite(doc)}</td>"
     puts "  <td>#{htmlEntitiesLite(html_link)}</td>"
     puts "  <td>#{html_link}</td>"
     puts "</tr>"
   end
 
   def htmlEntitiesLite(str)
+    if str.nil?
+      return ''
+    end
+
     str.gsub(/[<>]/, '<' => '&lt;', '>' => '&gt;')
   end
 

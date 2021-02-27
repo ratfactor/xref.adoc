@@ -1,18 +1,24 @@
 <html><head><style>
-table { width: 100%; } thead { background-color: silver }
+table { width: 100%; border-collapse: collapse; border: 2px solid #666; }
+thead { background-color: #3f87a6; color: #fff; }
+tbody { background-color: #e4f0f5; }
+td,th { border: 1px solid #555; padding: 5px 10px; }
+li { font-size: 120%; }
+code { background-color: #DDD; font-size: 120%; }
 </style>
 <body>
-<h2>Testing all syntax combinations with simple, relative document names.</h2>
+<h2>Testing syntax combinations with simple, relative document names.</h2>
 <ul>
 <li>Source Document: <code>qux.adoc</code>
 <li>Type of export: <code>one_to_one</code>
+<li>Export target section name: <code>N/A</code>
 </ul>
 <table><thead><tr>
-  <th>Xref</th>
-  <th>Target</th>
-  <th>Location ID</th>
-  <th>Output "Path"</th>
-  <th>Output Source</th>
+  <th>Input</th>
+  <th>Document</th>
+  <th>ID</th>
+  <th>Output link path</th>
+  <th>HTML</th>
   <th>Output</th>
 </tr></thead><tbody>
 <tr>
@@ -112,79 +118,18 @@ table { width: 100%; } thead { background-color: silver }
   <td><a href="bar.html#foo">Foobar</a></td>
 </tr>
 </tbody></table>
-<h2>Get ready for some pain!</h2>
-<ul>
-<li>Source Document: <code>baz/qux.adoc</code>
-<li>Type of export: <code>one_to_one</code>
-</ul>
-<table><thead><tr>
-  <th>Xref</th>
-  <th>Target</th>
-  <th>Location ID</th>
-  <th>Output "Path"</th>
-  <th>Output Source</th>
-  <th>Output</th>
-</tr></thead><tbody>
-<tr>
-  <td>xref:../bar#[Bar]</td>
-  <td>bar</td>
-  <td></td>
-  <td>../bar</td>
-  <td>&lt;a href="../bar.html"&gt;Bar&lt;/a&gt;</td>
-  <td><a href="../bar.html">Bar</a></td>
-</tr>
-<tr>
-  <td>&lt;&lt;../bar#,Bar&gt;&gt;</td>
-  <td>bar</td>
-  <td></td>
-  <td>../bar</td>
-  <td>&lt;a href="../bar.html"&gt;Bar&lt;/a&gt;</td>
-  <td><a href="../bar.html">Bar</a></td>
-</tr>
-<tr>
-  <td>xref:bar2#[Bar2]</td>
-  <td>baz/bar2</td>
-  <td></td>
-  <td>bar2</td>
-  <td>&lt;a href="bar2.html"&gt;Bar2&lt;/a&gt;</td>
-  <td><a href="bar2.html">Bar2</a></td>
-</tr>
-<tr>
-  <td>&lt;&lt;bar2#,Bar2&gt;&gt;</td>
-  <td>baz/bar2</td>
-  <td></td>
-  <td>bar2</td>
-  <td>&lt;a href="bar2.html"&gt;Bar2&lt;/a&gt;</td>
-  <td><a href="bar2.html">Bar2</a></td>
-</tr>
-<tr>
-  <td>xref:../baz/bar3#[Bar3]</td>
-  <td>baz/bar3</td>
-  <td></td>
-  <td>bar3</td>
-  <td>&lt;a href="bar3.html"&gt;Bar3&lt;/a&gt;</td>
-  <td><a href="bar3.html">Bar3</a></td>
-</tr>
-<tr>
-  <td>&lt;&lt;../baz/bar3#,Bar3&gt;&gt;</td>
-  <td>baz/bar3</td>
-  <td></td>
-  <td>bar3</td>
-  <td>&lt;a href="bar3.html"&gt;Bar3&lt;/a&gt;</td>
-  <td><a href="bar3.html">Bar3</a></td>
-</tr>
-</tbody></table>
-<h2>Free-for-all path madness</h2>
+<h2>Testing deep 'path-like' name traversal.</h2>
 <ul>
 <li>Source Document: <code>x/y/z/qux.adoc</code>
 <li>Type of export: <code>one_to_one</code>
+<li>Export target section name: <code>N/A</code>
 </ul>
 <table><thead><tr>
-  <th>Xref</th>
-  <th>Target</th>
-  <th>Location ID</th>
-  <th>Output "Path"</th>
-  <th>Output Source</th>
+  <th>Input</th>
+  <th>Document</th>
+  <th>ID</th>
+  <th>Output link path</th>
+  <th>HTML</th>
   <th>Output</th>
 </tr></thead><tbody>
 <tr>
@@ -252,12 +197,225 @@ table { width: 100%; } thead { background-color: silver }
   <td><a href="../../b/z/bar.html">Bar</a></td>
 </tr>
 <tr>
-  <td>xref:../../../beef/chicken/pork/bar#[Bar]</td>
-  <td>beef/chicken/pork/bar</td>
+  <td>xref:../../../a/b/c/bar#[Bar]</td>
+  <td>a/b/c/bar</td>
   <td></td>
-  <td>../../../beef/chicken/pork/bar</td>
-  <td>&lt;a href="../../../beef/chicken/pork/bar.html"&gt;Bar&lt;/a&gt;</td>
-  <td><a href="../../../beef/chicken/pork/bar.html">Bar</a></td>
+  <td>../../../a/b/c/bar</td>
+  <td>&lt;a href="../../../a/b/c/bar.html"&gt;Bar&lt;/a&gt;</td>
+  <td><a href="../../../a/b/c/bar.html">Bar</a></td>
+</tr>
+</tbody></table>
+<h2>Testing document and ID combinations with one-to-one exporting (one output file per document).</h2>
+<ul>
+<li>Source Document: <code>foo/qux.adoc</code>
+<li>Type of export: <code>one_to_one</code>
+<li>Export target section name: <code>N/A</code>
+</ul>
+<table><thead><tr>
+  <th>Input</th>
+  <th>Document</th>
+  <th>ID</th>
+  <th>Output link path</th>
+  <th>HTML</th>
+  <th>Output</th>
+</tr></thead><tbody>
+<tr>
+  <td>xref:foo[Foo]</td>
+  <td></td>
+  <td>foo</td>
+  <td></td>
+  <td>&lt;a href="#foo"&gt;Foo&lt;/a&gt;</td>
+  <td><a href="#foo">Foo</a></td>
+</tr>
+<tr>
+  <td>xref:bar#[Bar]</td>
+  <td>foo/bar</td>
+  <td></td>
+  <td>bar</td>
+  <td>&lt;a href="bar.html"&gt;Bar&lt;/a&gt;</td>
+  <td><a href="bar.html">Bar</a></td>
+</tr>
+<tr>
+  <td>xref:bar.adoc[Bar]</td>
+  <td>foo/bar</td>
+  <td></td>
+  <td>bar</td>
+  <td>&lt;a href="bar.html"&gt;Bar&lt;/a&gt;</td>
+  <td><a href="bar.html">Bar</a></td>
+</tr>
+<tr>
+  <td>xref:../bar#[Bar]</td>
+  <td>bar</td>
+  <td></td>
+  <td>../bar</td>
+  <td>&lt;a href="../bar.html"&gt;Bar&lt;/a&gt;</td>
+  <td><a href="../bar.html">Bar</a></td>
+</tr>
+<tr>
+  <td>xref:../bar#[Bar]</td>
+  <td>bar</td>
+  <td></td>
+  <td>../bar</td>
+  <td>&lt;a href="../bar.html"&gt;Bar&lt;/a&gt;</td>
+  <td><a href="../bar.html">Bar</a></td>
+</tr>
+<tr>
+  <td>xref:bar#foo[Foobar]</td>
+  <td>foo/bar</td>
+  <td>foo</td>
+  <td>bar</td>
+  <td>&lt;a href="bar.html#foo"&gt;Foobar&lt;/a&gt;</td>
+  <td><a href="bar.html#foo">Foobar</a></td>
+</tr>
+<tr>
+  <td>xref:../bar#foo[Foobar]</td>
+  <td>bar</td>
+  <td>foo</td>
+  <td>../bar</td>
+  <td>&lt;a href="../bar.html#foo"&gt;Foobar&lt;/a&gt;</td>
+  <td><a href="../bar.html#foo">Foobar</a></td>
+</tr>
+</tbody></table>
+<h2>Testing document and ID combinations with many-to-one exporting (one big output file).</h2>
+<ul>
+<li>Source Document: <code>foo/qux.adoc</code>
+<li>Type of export: <code>many_to_one</code>
+<li>Export target section name: <code>N/A</code>
+</ul>
+<table><thead><tr>
+  <th>Input</th>
+  <th>Document</th>
+  <th>ID</th>
+  <th>Output link path</th>
+  <th>HTML</th>
+  <th>Output</th>
+</tr></thead><tbody>
+<tr>
+  <td>xref:foo[Foo]</td>
+  <td></td>
+  <td>foo</td>
+  <td>N/A</td>
+  <td>&lt;a href="#foo"&gt;Foo&lt;/a&gt;</td>
+  <td><a href="#foo">Foo</a></td>
+</tr>
+<tr>
+  <td>xref:bar#[Bar]</td>
+  <td>foo_bar</td>
+  <td></td>
+  <td>N/A</td>
+  <td>&lt;a href="foo_bar.html#foo_bar_id"&gt;Bar&lt;/a&gt;</td>
+  <td><a href="foo_bar.html#foo_bar_id">Bar</a></td>
+</tr>
+<tr>
+  <td>xref:bar.adoc[Bar]</td>
+  <td>foo_bar</td>
+  <td></td>
+  <td>N/A</td>
+  <td>&lt;a href="foo_bar.html#foo_bar_id"&gt;Bar&lt;/a&gt;</td>
+  <td><a href="foo_bar.html#foo_bar_id">Bar</a></td>
+</tr>
+<tr>
+  <td>xref:../bar#[Bar]</td>
+  <td>bar</td>
+  <td></td>
+  <td>N/A</td>
+  <td>&lt;a href="bar.html#bar_id"&gt;Bar&lt;/a&gt;</td>
+  <td><a href="bar.html#bar_id">Bar</a></td>
+</tr>
+<tr>
+  <td>xref:../bar#[Bar]</td>
+  <td>bar</td>
+  <td></td>
+  <td>N/A</td>
+  <td>&lt;a href="bar.html#bar_id"&gt;Bar&lt;/a&gt;</td>
+  <td><a href="bar.html#bar_id">Bar</a></td>
+</tr>
+<tr>
+  <td>xref:bar#foo[Foobar]</td>
+  <td>foo_bar</td>
+  <td>foo</td>
+  <td>N/A</td>
+  <td>&lt;a href="foo_bar.html#foo_bar_id"&gt;Foobar&lt;/a&gt;</td>
+  <td><a href="foo_bar.html#foo_bar_id">Foobar</a></td>
+</tr>
+<tr>
+  <td>xref:../bar#foo[Foobar]</td>
+  <td>bar</td>
+  <td>foo</td>
+  <td>N/A</td>
+  <td>&lt;a href="bar.html#bar_id"&gt;Foobar&lt;/a&gt;</td>
+  <td><a href="bar.html#bar_id">Foobar</a></td>
+</tr>
+</tbody></table>
+<h2>Testing document and ID combinations with one-to-many exporting (each document split by section into multiple output files).</h2>
+<ul>
+<li>Source Document: <code>foo/qux.adoc</code>
+<li>Type of export: <code>one_to_many</code>
+<li>Export target section name: <code>section15</code>
+</ul>
+<table><thead><tr>
+  <th>Input</th>
+  <th>Document</th>
+  <th>ID</th>
+  <th>Output link path</th>
+  <th>HTML</th>
+  <th>Output</th>
+</tr></thead><tbody>
+<tr>
+  <td>xref:foo[Foo]</td>
+  <td></td>
+  <td>foo</td>
+  <td>qux_section15</td>
+  <td>&lt;a href="qux_section15.html#foo"&gt;Foo&lt;/a&gt;</td>
+  <td><a href="qux_section15.html#foo">Foo</a></td>
+</tr>
+<tr>
+  <td>xref:bar#[Bar]</td>
+  <td>foo/bar</td>
+  <td></td>
+  <td>bar_section15</td>
+  <td>&lt;a href="bar_section15.html"&gt;Bar&lt;/a&gt;</td>
+  <td><a href="bar_section15.html">Bar</a></td>
+</tr>
+<tr>
+  <td>xref:bar.adoc[Bar]</td>
+  <td>foo/bar</td>
+  <td></td>
+  <td>bar_section15</td>
+  <td>&lt;a href="bar_section15.html"&gt;Bar&lt;/a&gt;</td>
+  <td><a href="bar_section15.html">Bar</a></td>
+</tr>
+<tr>
+  <td>xref:../bar#[Bar]</td>
+  <td>bar</td>
+  <td></td>
+  <td>../bar_section15</td>
+  <td>&lt;a href="../bar_section15.html"&gt;Bar&lt;/a&gt;</td>
+  <td><a href="../bar_section15.html">Bar</a></td>
+</tr>
+<tr>
+  <td>xref:../bar#[Bar]</td>
+  <td>bar</td>
+  <td></td>
+  <td>../bar_section15</td>
+  <td>&lt;a href="../bar_section15.html"&gt;Bar&lt;/a&gt;</td>
+  <td><a href="../bar_section15.html">Bar</a></td>
+</tr>
+<tr>
+  <td>xref:bar#foo[Foobar]</td>
+  <td>foo/bar</td>
+  <td>foo</td>
+  <td>bar_section15</td>
+  <td>&lt;a href="bar_section15.html#foo"&gt;Foobar&lt;/a&gt;</td>
+  <td><a href="bar_section15.html#foo">Foobar</a></td>
+</tr>
+<tr>
+  <td>xref:../bar#foo[Foobar]</td>
+  <td>bar</td>
+  <td>foo</td>
+  <td>../bar_section15</td>
+  <td>&lt;a href="../bar_section15.html#foo"&gt;Foobar&lt;/a&gt;</td>
+  <td><a href="../bar_section15.html#foo">Foobar</a></td>
 </tr>
 </tbody></table>
 </body><html>

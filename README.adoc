@@ -10,10 +10,10 @@ To try it out:
 $ ruby test.rb
 ```
 
-To see the results without running anything:
+To see the results (HTML formatted summary and link demo) without running anything, try these links:
 
-link:https://htmlpreview.github.io/?https://github.com/ratfactor/xref.adoc/blob/main/results.html[The Results]
-(link:results.html[source results.html])
+link:https://htmlpreview.github.io/?https://github.com/ratfactor/xref.adoc/blob/main/results.html[The HTML Results]
+(link:results.html[source])
 
 == What the application tests:
 
