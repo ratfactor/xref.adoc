@@ -111,7 +111,7 @@ The same cross-reference links in the alternative syntax:
 <<bar.adoc#foo,Foobar>>
 ----
 
-Note that the form marked with a `*` form doesn't currently work in _existing_ AsciiDoc implementations! It _does_ work in this test application.
+Note that the form marked with a `*` doesn't currently work in _existing_ AsciiDoc implementations! It _does_ work in this test application.
 
 == Researching prior art
 
