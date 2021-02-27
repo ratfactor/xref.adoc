@@ -111,7 +111,9 @@ The same cross-reference links in the alternative syntax:
 <<bar.adoc#foo,Foobar>>
 ----
 
-== How others do it
+Note that the `<<bar.adoc,Bar>>` form doesn't currently work in _existing_ AsciiDoc implementations! It _does_ work in this test application.
+
+== Researching prior art
 
 === URI
 
