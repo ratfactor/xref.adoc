@@ -12,7 +12,8 @@ $ ruby test.rb
 
 To see the results without running anything:
 
-link:results.html[results.html]
+link:https://htmlpreview.github.io/?https://github.com/ratfactor/xref.adoc/blob/main/results.html[The Results]
+(link:results.html[source results.html])
 
 == What the application tests:
 
