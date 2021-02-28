@@ -61,7 +61,9 @@ These _look_ like file paths (and they might very well correspond with actual fi
 They allow documents to be organized into a hierarchical tree.
 The use of "path-like" names with "/" separators is entirely optional.
 
-Note, also, that the `.adoc` suffix at the end of each example document name _looks_ like a file extension (and, as before, may very well correspond actual file names), but there do not need to be files with these names (or any files at all!). The `.adoc` suffix is part of the document name and helps AsciiDoc implementations identify document names (as opposed to location IDs) in the xref syntax. For more on that, read on!
+The `.adoc` suffix at the end of each example document name _looks_ like a file extension (and, as before, may very well correspond actual file names), but there do not need to be files with these names (or any files at all!). The `.adoc` suffix is part of the document name and helps AsciiDoc implementations identify document names (as opposed to location IDs) in the xref syntax. For more on that, read on!
+
+A cross-reference link should not start with a `/`. Doing so will result in "undefined behavior" (to allow AsciiDoc implementations to continue to handle this situation as they do now for backward compatibility). A `/` at the beginning of the link would seem to imply the "root" or "base" directory of the document set. This might be a handy thing to have, but is a new concept would doubtlessly clash with existing behavior.
 
 == Cross-reference ("xref") syntax
 
