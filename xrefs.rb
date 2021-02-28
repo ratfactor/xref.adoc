@@ -200,8 +200,16 @@ class Xref
     #   * An ID
     # A cross-referenced document or ID or both will be supplied.
 
-    doc = @document
-    id  = @id
+    doc = nil
+    id  = nil
+
+    if @document
+      doc = @document.dup
+    end
+
+    if @id
+      id = @id.dup
+    end
 
     if @env.export_type == :one_to_one
       doc = make_relative_path doc
