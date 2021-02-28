@@ -41,9 +41,9 @@ AsciiDoc documents may make cross-reference links to:
 * A location in another document (by document name and location ID)
 * Another document (by document name)
 
-Cross-reference links to other documents must be be within a "document set".
+Cross-reference links to other documents must be be within a "document set". That is, a group of AsciiDoc source documents.
 
-The document name may include multiple segments separated by "/" which resemble a file path.  Cross-reference links may reference other documents with names that are relative to the current document in a manner similar to URIs like so:
+The document name may include multiple segments separated by "/" which resemble a file path.  Cross-reference links may reference other documents with names that are relative to the current document in a manner similar to URIs.
 
 If made in a document named `foo/bar.adoc`, the following links would resolve like so:
 
@@ -63,11 +63,11 @@ The use of "path-like" names with "/" separators is entirely optional.
 
 The `.adoc` suffix at the end of each example document name _looks_ like a file extension (and, as before, may very well correspond actual file names), but there do not need to be files with these names (or any files at all!). The `.adoc` suffix is part of the document name and helps AsciiDoc implementations identify document names (as opposed to location IDs) in the xref syntax. For more on that, read on!
 
-A cross-reference link should not start with a `/`. Doing so will result in "undefined behavior" (to allow AsciiDoc implementations to continue to handle this situation as they do now for backward compatibility). A `/` at the beginning of the link would seem to imply the "root" or "base" directory of the document set. This might be a handy thing to have, but is a new concept would doubtlessly clash with existing behavior.
+A cross-reference link should not start with a `/` (like `/foo/bar.adoc`). Doing so will result in "undefined behavior" (to allow AsciiDoc implementations to continue to handle this situation as they do now for backward compatibility). A `/` at the beginning of the link would seem to imply the "root" or "base" directory of the document set. This might be a handy thing to have, but is a new concept would doubtlessly clash with existing behavior.
 
 == Cross-reference ("xref") syntax
 
-An AsciiDoc cross-references have the following syntax:
+AsciiDoc cross-references have the following syntax:
 
 ----
 xref:DOCUMENT-NAME#LOCATION-ID[LABEL]
@@ -205,17 +205,17 @@ Example, where `make` is the name of the manual to link to:
 @xref{Top,,, make, The GNU Make Manual}.
 ----
 
-https://www.gnu.org/software/texinfo/manual/texinfo/html_node/Referring-to-a-Manual-as-a-Whole.html
-https://en.wikipedia.org/wiki/Texinfo
+* https://www.gnu.org/software/texinfo/manual/texinfo/html_node/Referring-to-a-Manual-as-a-Whole.html
+* https://en.wikipedia.org/wiki/Texinfo
 
 
 == Org-mode
 
 Not surprisingly, Org-mode has a crazy number of link options:
 
-https://orgmode.org/manual/Link-Format.html
-https://orgmode.org/manual/Internal-Links.html
-https://orgmode.org/manual/External-Links.html
+* https://orgmode.org/manual/Link-Format.html
+* https://orgmode.org/manual/Internal-Links.html
+* https://orgmode.org/manual/External-Links.html
 
 Amusingly, "internal links" reverse AsciiDoc's `[[]]` and `<<>>` anchor and xref syntax:
 
@@ -250,8 +250,8 @@ A link in WikiWikiWeb is CamelCaseLikeThis.
 A link in MediaWiki uses brackets like [[foo]] or  [[foo|Foo Description]].
 ----
 
-https://en.wikipedia.org/wiki/WikiWikiWeb
-https://en.wikipedia.org/wiki/Creole_(markup)
+* https://en.wikipedia.org/wiki/WikiWikiWeb
+* https://en.wikipedia.org/wiki/Creole_(markup)
 
 Wiki pages may or may not be stored in files and they are often converted on the fly to HTML for viewing. It is fundamental to wikis that all link conversion is completely automatic and as frictionless as possible.
 
@@ -266,6 +266,6 @@ https://tex.stackexchange.com/questions/14364/cross-referencing-between-differen
 
 Troff is truly for stand-alone documents and manual pages. They have traditional bibiographic-style "references", but virtually no concept of linking other than URL hyperlinks and email address links (which PDF and HTML export types seem to understand) (which PDF and HTML export types seem to understand).
 
-https://en.wikipedia.org/wiki/Troff
-https://man7.org/linux/man-pages/man7/groff_man.7.html
+* https://en.wikipedia.org/wiki/Troff
+* https://man7.org/linux/man-pages/man7/groff_man.7.html
 
