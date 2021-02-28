@@ -35,35 +35,36 @@ The source of the output document is, of course, in this repo. Look for `results
 
 == Proposing AsciiDoc Cross-Reference Addressing
 
+(Note that this mostly describes behavior that already exists. The new concept is that AsciiDoc would define this behavior for a "document set" regardless of platform, filesystem, or type of output.)
+
 AsciiDoc documents may make cross-reference links to:
 
-* A location in the same document (by ID)
+* A location in the same document (by location ID)
 * A location in another document (by document name and location ID)
 * Another document (by document name)
 
-Cross-reference links to other documents must be be within a "document set". That is, a group of AsciiDoc source documents.
+Cross-reference links to other documents must be within a "document set". That is, a group of AsciiDoc source documents.
 
 The document name may include multiple segments separated by "/" which resemble a file path.  Cross-reference links may reference other documents with names that are relative to the current document in a manner similar to URIs.
 
-If made in a document named `foo/bar.adoc`, the following links would resolve like so:
+Example: If made in a document named `foo/bar.adoc`, the following links would resolve like so:
 
 |===
-|Xref Link | Points to
+|Xref link | Resolves to document named
 
-|baz.adoc | foo/baz.adoc
-|beep/boop.adoc | foo/beep/boop.adoc
-|../home.adoc | home.adoc
-|../qux/biff.adoc | qux/biff.adoc
+|baz.adoc | foo/baz
+|beep/boop.adoc | foo/beep/boop
+|../home.adoc | home
+|../qux/biff.adoc | qux/biff
 |===
 
-These _look_ like file paths (and they might very well correspond with actual file paths), but the name segments are system-independent.
+These _look_ like file paths (and they might very well correspond with actual files!), but the names (including the "/"-separated segments) are independent of any platform or implementation.
 
-They allow documents to be organized into a hierarchical tree.
-The use of "path-like" names with "/" separators is entirely optional.
+This "path-like" naming scheme allows documents to be organized into a hierarchical tree. It's use is entirely optional on the part of document authors.
 
-The `.adoc` suffix at the end of each example document name _looks_ like a file extension (and, as before, may very well correspond actual file names), but there do not need to be files with these names (or any files at all!). The `.adoc` suffix is part of the document name and helps AsciiDoc implementations identify document names (as opposed to location IDs) in the xref syntax. For more on that, read on!
+The ".adoc" suffix at the end of each example document name _looks_ like a file extension, but no such file needs to exist. The ".adoc" suffix is simply part of the cross-reference syntax that identifies these as  document names instead of location IDs. (More on that in a moment.)
 
-A cross-reference link should not start with a `/` (like `/foo/bar.adoc`). Doing so will result in "undefined behavior" (to allow AsciiDoc implementations to continue to handle this situation as they do now for backward compatibility). A `/` at the beginning of the link would seem to imply the "root" or "base" directory of the document set. This might be a handy thing to have, but is a new concept would doubtlessly clash with existing behavior.
+A beginning `/` (as in `/foo/bar.adoc`) will not be used. Doing so will result in "undefined behavior". This is to allow AsciiDoc implementations to continue to handle this situation as they do now for backward compatibility. A `/` at the beginning of the link would seem to imply the "root" or "base" directory of the document set. This might be a handy thing to have, but is a new concept would doubtlessly clash with existing behavior.
 
 == Cross-reference ("xref") syntax
 
@@ -86,7 +87,7 @@ With the following rules:
 * If the `#` is present, the ".adoc" ending may left off of the `DOCUMENT-NAME` and is implied.
 * Either a `DOCUMENT-NAME` _or_ `LOCATION-ID` is required.
 * If both `DOCUMENT-NAME` _and_ `LOCATION-ID` are present, they must be separated with `#`.
-* `LABEL` is optional _unless_ the `DOCUMENT-NAME` is provided (current tooling cannot infer the title)
+* LABEL is optional _unless_ the DOCUMENT-NAME is provided (current tooling cannot infer the title, else we could lift this restriction).
 * If the `LABEL` is not present, the `[]` may remain empty in the first form and the `,` may be left off in the second compact `<<>>` form.
 
 === Examples of "xref" syntax
@@ -95,10 +96,10 @@ The regular inline macro form:
 
 ----
 xref:foo[Foo]             - a link to a location in the same document with ID "foo"
-xref:bar#[Bar]            - a link to a document named "bar.adoc"
+xref:bar#[Bar]            - a link to a document named "bar"
 xref:bar.adoc[Bar]        - same
 xref:bar.adoc#[Bar]       - same
-xref:bar#foo[Foobar]      - a link to location ID "foo" in document "bar.adoc"
+xref:bar#foo[Foobar]      - a link to location ID "foo" in document "bar"
 xref:bar.adoc#foo[Foobar] - same
 ----
 
