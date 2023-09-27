@@ -1,5 +1,9 @@
 = AsciiDoc Xref Proof of Concept
 
+
+**MOVED!** Hello, I am moving my repos to http://ratfactor.com/repos/
+and setting them to read-only ("archived") on GitHub. Thank you, _-Dave_
+
 This repo contains a "code-as-documentation" example of a proposed cross-reference addressing (and related syntax) scheme for AsciiDoc documents.
 
 This README contains a description of what is being proposed, as well as some research notes.
